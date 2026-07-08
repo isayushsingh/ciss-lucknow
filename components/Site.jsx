@@ -133,7 +133,6 @@ const SERVICES = [
   ["24/7 General Guard", "/images/services/general.jpg"],
 ];
 const WHY = [
-  ["shield", "Ex-Defense Leadership", "Founded and led by ex-servicemen \u2014 real command experience, not clipboard managers.", { left: 10, top: 12, rot: -3 }],
   ["check", "Rigorously Vetted Guards", "Police verification, background checks, and physical fitness screening on every single hire.", { left: 358, top: 0, rot: 2 }],
   ["clock", "24/7 Rapid Response", "A live control room and Quick Response Team, reachable any hour, any day of the year.", { left: 700, top: 44, rot: -2 }],
   ["doc", "100% PSARA Compliant", "Fully licensed under PSARA, with PF, ESI and statutory paperwork handled for you.", { left: 150, top: 300, rot: 3 }],
@@ -231,6 +230,13 @@ function Services() {
 }
 
 function WhyUs() {
+  // feature cards shifted right to make room for the founder card
+  const POS = [
+    { left: 380, top: 70, rot: 0 },
+    { left: 730, top: 70, rot: 0 },
+    { left: 380, top: 350, rot: 0 },
+    { left: 730, top: 350, rot: 0 }
+  ];
   return (
     <section className="sec" id="why">
       <div className="sec-head">
@@ -240,11 +246,25 @@ function WhyUs() {
       </div>
       <div className="wrap">
         <div className="why-wrap">
-          {WHY.map(([icon, t, d, pos]) => (
+          <div className="why-founder">
+            {/* swap this div for <img src="/images/founder.jpg" .../> when you have the photo */}
+            <div className="photo">/images/founder.jpg</div>
+            <div className="body">
+              <span className="badge">Founder &middot; Former IPS Officer</span>
+              <div className="name">[Founder Name]</div>
+              <div className="role">IPS (Retd.) &middot; Ex-Superintendent of Police</div>
+              <div className="blurb">
+                Over two decades in the Indian Police Service. After a distinguished career in
+                law enforcement, he founded CISS to bring that same discipline, integrity, and
+                command to private security across Lucknow.
+              </div>
+            </div>
+          </div>
+          {WHY.map(([icon, t, d], i) => (
             <div
               key={t}
               className="why-card"
-              style={{ left: pos.left, top: pos.top, transform: `rotate(${pos.rot}deg)` }}
+              style={{ left: POS[i].left, top: POS[i].top, transform: `rotate(${POS[i].rot}deg)` }}
             >
               <div className="why-ico"><LineIcon name={icon} /></div>
               <div className="why-t">{t}</div>
