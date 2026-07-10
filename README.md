@@ -1,57 +1,58 @@
 # CISS Lucknow — website
 
-Marketing site for CISS Lucknow (Civil & Industrial Security Services), built with
-**Next.js (App Router)** and plain CSS. Mobile-first, deploys to **Vercel**.
+Next.js (App Router) + plain CSS. Mobile-first. Deploys to Vercel.
 
 ## Run locally
-
-Requires Node.js 18.18+ (or 20+).
-
 ```bash
 npm install
-npm run dev
+npm run dev     # http://localhost:3000
 ```
 
-Open http://localhost:3000
+## ⚠️ Before you go live — edit these
 
-## Project structure
+**1. Contact form key** (`components/Site.jsx`, top of file)
+   - Go to https://web3forms.com, enter `contact.cisslucknow@gmail.com`, get your Access Key.
+   - Paste it into `const WEB3FORMS_KEY = "YOUR_ACCESS_KEY_HERE";`
+   - Both forms (the Get-a-Quote modal and the Request-Assessment form) use it.
+   - Test once after deploying — check spam the first time.
 
+**2. Business details** (`components/Site.jsx`, top of file)
+   - `ADDRESS` — your real office address
+   - `MAPS_QUERY` — exact address or business name, used for the map + directions link
+   - PHONE and EMAIL are already set.
+
+**3. Founder details** (`components/Site.jsx`, WhyUs section)
+   - Replace `[Founder Name]` and the IPS designation line.
+
+**4. SEO domain** (`app/layout.jsx`)
+   - Set `SITE_URL` to your real domain once you have one.
+
+**5. Structured data** (`app/page.jsx`)
+   - Fill in `streetAddress` and `postalCode` in the `localBusiness` object.
+
+## Structure
 ```
 app/
-  layout.jsx      # <html> shell, metadata, loads globals.css
-  page.jsx        # renders <Site />
-  globals.css     # all styles + Google Fonts (Instrument Serif + Inter)
+  layout.jsx    # metadata, SEO, SITE_URL
+  page.jsx      # JSON-LD structured data + <Site />
+  globals.css   # all styles + fonts
+  robots.js     # /robots.txt
+  sitemap.js    # /sitemap.xml
 components/
-  Site.jsx        # the whole site (nav, hero, services, why-us, process,
-                  # testimonials, contact form, footer) — one client component
-public/
-  images/
-    logo.png      # the CISS crest (already wired into the hero + footer)
-    PLACEHOLDERS.md  # list of the photos to add later
+  Site.jsx      # entire site; content arrays at the top
+public/images/  # logo + PLACEHOLDERS.md
 ```
 
-Everything lives in `components/Site.jsx`. Section components are defined top to
-bottom; copy, service list, testimonials, and process steps are plain arrays near
-the top of the file — edit those to change content.
-
-## Images
-
-Photos currently render as labelled placeholder tiles. See
-`public/images/PLACEHOLDERS.md` for the exact paths to drop real images into.
-
 ## Deploy to Vercel
+1. Push to a GitHub repo.
+2. vercel.com → Add New → Project → import it.
+3. Auto-detects Next.js → Deploy. Free `*.vercel.app` URL.
 
-1. Push this folder to a GitHub repo.
-2. Go to vercel.com → **Add New → Project** → import the repo.
-3. Framework preset auto-detects **Next.js**. No env vars needed yet.
-4. Click **Deploy**. You'll get a free `*.vercel.app` URL.
-
-(Or, from this folder: `npx vercel` and follow the prompts.)
-
-## Still to do
-
-- Wire the contact form (currently shows a confirmation but doesn't send). Planned:
-  Web3Forms — free, emails each inquiry, no backend.
-- Replace placeholder photos and copy.
-- Swap in your real phone number, email, and office address (search the file for
-  `+91 00000 00000` and `hello@cisslucknow.com`).
+## SEO checklist after launch
+- [ ] Create a **Google Business Profile** for CISS Lucknow (biggest single win for
+      "security guards near me" searches — more than anything on the site itself).
+- [ ] Submit the site to **Google Search Console** and add the sitemap.
+- [ ] Get the business listed on JustDial, IndiaMART, Sulekha (local citations).
+- [ ] Ask happy clients for Google reviews.
+- [ ] Add real photos with descriptive filenames.
+- [ ] Once you have a custom domain, update `SITE_URL` in `app/layout.jsx`.
