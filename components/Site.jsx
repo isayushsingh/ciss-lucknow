@@ -40,6 +40,13 @@ const SERVICES = [
   ["Construction & Property Guards", "/images/services/construction.jpg"],
   ["24/7 General Security Guards", "/images/services/general.jpg"],
 ];
+const MOCK_SERVICES = [
+  "Industrial & Factory Security",
+  "School & College Security",
+  "Mall & Cinema Security",
+  "Event & Wedding Security",
+  "Women Security Guards",
+];
 
 const WHY = [
   ["check", "Rigorously Vetted Guards", "Police verification, background checks, and physical fitness screening on every single hire."],
@@ -79,6 +86,32 @@ const LOGOS_ROW_2 = ["GOMTI RESIDENCY", "KISAN COLD STORAGE", "ROYAL BANQUETS", 
 const NAV = [["Services", "#services"], ["Why Us", "#why"], ["Process", "#process"], ["Clients", "#clients"], ["Contact", "#contact"]];
 
 // ============ HELPERS ============
+// Cycles through phrases with a type / pause / delete effect.
+function useTypewriter(words, { type = 70, del = 40, hold = 1400 } = {}) {
+  const [text, setText] = useState(words[0]);
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    let w = 0, i = words[0].length, deleting = false, timer;
+    const tick = () => {
+      const word = words[w];
+      if (!deleting) {
+        i++;
+        setText(word.slice(0, i));
+        if (i >= word.length) { deleting = true; timer = setTimeout(tick, hold); return; }
+        timer = setTimeout(tick, type);
+      } else {
+        i--;
+        setText(word.slice(0, Math.max(0, i)));
+        if (i <= 0) { deleting = false; w = (w + 1) % words.length; timer = setTimeout(tick, 260); return; }
+        timer = setTimeout(tick, del);
+      }
+    };
+    timer = setTimeout(tick, hold);
+    return () => clearTimeout(timer);
+  }, [words, type, del, hold]);
+  return text;
+}
+
 function useIsDesktop() {
   const [d, setD] = useState(false);
   useEffect(() => {
@@ -355,6 +388,7 @@ function Sparkle({ className, style }) {
 }
 
 function HeroMock() {
+   const typed = useTypewriter(MOCK_SERVICES);
   return (
     <div className="mock" aria-hidden="true">
       <Sparkle className="mock-sparkle" />
@@ -366,7 +400,7 @@ function HeroMock() {
             strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
           </svg>
-          <span>Industrial &amp; Factory Security</span>
+          <span>{typed}<span className="type-caret" /></span>
         </div>
         <div className="mock-skeleton">
           <i /><b />
@@ -623,10 +657,10 @@ function Process() {
                     </button>
                   ))}
                   {/* down arrow sits under the three step buttons */}
-                  <div className="proc-next">
+                  {/* <div className="proc-next">
                     <button onClick={() => goTo(active + 1)} disabled={active >= STEPS.length - 1}
                       aria-label="Next step">&darr;</button>
-                  </div>
+                  </div> */}
                 </div>
               )}
 
