@@ -417,7 +417,8 @@ function HeroMock() {
       {/* the matched result */}
       <div className="mock-result">
         <div className="mock-photo">
-          <img className="mock-badge" src="/images/logo.png" alt="" />
+            <Img src="/images/hero-guard.jpg" alt="Matched CISS security guard" />
+          {/* <img className="mock-badge" src="/images/logo.png" alt="" /> */}
         </div>
         <div className="mock-meta">
           <div className="mock-name">Guard matched<span className="mock-caret" /></div>
@@ -438,8 +439,8 @@ function Hero({ onQuote }) {
     <header className="hero" id="top">
       <div className="wrap hero-grid">
         <div className="hero-copy">
-          <h1 className="serif">Find your <span className="italic">guard</span>, not just an agency</h1>
-          <p className="sub">Vetted, PSARA-licensed guards matched to your site &mdash; and a team that stays on watch long after day one.</p>
+          <h1 className="serif"><span className="italic">Security Guard Services </span> in Lucknow</h1>
+          <p className="sub">From weddings to industrial sites, we match you with highly-trained, PSARA-licensed guards in as little as 48 hours.</p>
           <div className="hero-cta">
             <button className="pill pill-white" onClick={onQuote}>Talk to us <span className="arrow-circ" aria-hidden="true">&rarr;</span></button>
             <a href="#services" className="pill pill-grey" style={{ textDecoration: "none" }}>View services</a>
@@ -482,11 +483,10 @@ function Services() {
             <>
               <div className="focus-img svc-img"><Img src={path} alt={`${label} in Lucknow`} /></div>
               <h3 className="svc-label">{label}</h3>
-              <div className="svc-arrow" aria-hidden="true">&rarr;</div>
+              {/* <div className="svc-arrow" aria-hidden="true">&rarr;</div> */}
             </>
           )}
         />
-        <p className="hint">14 services &mdash; swipe or use the arrows</p>
       </div>
     </section>
   );
@@ -506,11 +506,11 @@ function WhyUs() {
           <div className="why-founder">
             <div className="photo"><Img src="/images/founder.jpg" alt="Founder of CISS Lucknow, a retired IPS officer" /></div>
             <div className="body">
-              <span className="badge">Founder &middot; Former IPS Officer</span>
-              <div className="name">[Founder Name]</div>
-              <div className="role">IPS (Retd.) &middot; Ex-Superintendent of Police</div>
+              <span className="badge">Retired IPS Officer</span>
+              <div className="name">M.R. Singh</div>
+              <div className="role">Ex-Deputy Inspector General (Uttar Pradesh Police)</div>
               <p className="blurb">
-                Over two decades in the Indian Police Service. After a distinguished career in law
+                Over three decades in the Indian Police Service. After a distinguished career in law
                 enforcement, he founded CISS to bring that same discipline, integrity, and command
                 to private security across Lucknow.
               </p>
@@ -550,142 +550,56 @@ function ClientLogos() {
 }
 
 function Process() {
-  const isD = useIsDesktop();
   const [active, setActive] = useState(0);
-  const trackRef = useRef(null);
-  const sentinels = useRef([]);
-  const lockRef = useRef(false);
-  const settleRef = useRef(null);
-
-  useEffect(() => () => clearInterval(settleRef.current), []);
-
-  // Scroll → active step. Listens on `document` in the capture phase so it works
-  // whether the page scrolls on `window` or inside a nested scroll container.
-  useEffect(() => {
-    const onScroll = () => {
-      if (lockRef.current) return;
-      const t = trackRef.current;
-      if (!t) return;
-      const vh = window.innerHeight;
-      const total = t.offsetHeight - vh;
-      const scrolled = Math.min(Math.max(-t.getBoundingClientRect().top, 0), total);
-      const p = total > 0 ? scrolled / total : 0;
-      setActive(Math.min(STEPS.length - 1, Math.floor(p * STEPS.length * 0.999)));
-    };
-    document.addEventListener("scroll", onScroll, { capture: true, passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    onScroll();
-    return () => {
-      document.removeEventListener("scroll", onScroll, { capture: true });
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [isD]);
-
-  // Jump to a step by scrolling its sentinel into view (container-agnostic).
-  // The lock is released only once the smooth scroll has *settled* — a fixed
-  // timer would expire mid-flight and snap the step back.
-  const goTo = useCallback((i) => {
-    const idx = Math.max(0, Math.min(STEPS.length - 1, i));
-    const target = sentinels.current[idx];
-    if (!target) return;
-    setActive(idx);
-    lockRef.current = true;
-    clearInterval(settleRef.current);
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    let last = null;
-    let stable = 0;
-    let ticks = 0;
-    settleRef.current = setInterval(() => {
-      const t = trackRef.current;
-      const pos = t ? Math.round(t.getBoundingClientRect().top) : 0;
-      if (pos === last) stable += 1;
-      else stable = 0;
-      last = pos;
-      ticks += 1;
-      // settled for ~150ms, or hard stop after 3s
-      if (stable >= 3 || ticks > 60) {
-        clearInterval(settleRef.current);
-        lockRef.current = false;
-      }
-    }, 50);
-  }, []);
-
+  const go = (i) => setActive(Math.max(0, Math.min(STEPS.length - 1, i)));
   const [n, tag, title, desc, get, img] = STEPS[active];
 
   return (
-    <section id="process" aria-labelledby="proc-h">
-      <div ref={trackRef} className="proc-track" style={{ height: `${STEPS.length * 90}vh` }}>
-        {/* invisible scroll targets, one per step */}
-        {STEPS.map((_, i) => (
-          <span
-            key={i}
-            aria-hidden="true"
-            ref={(el) => (sentinels.current[i] = el)}
-            className="proc-sentinel"
-            style={{ top: `${i * 90}vh` }}
-          />
-        ))}
+    <section id="process" className="proc" aria-labelledby="proc-h">
+      <div className="wrap">
+        <div className="proc-head">
+          <span className="eyebrow dark">Process</span>
+          <h2 className="serif" id="proc-h">A clear <span className="italic">process</span>, from first call to daily watch</h2>
+        </div>
 
-        <div className="proc-sticky">
-          <div className="wrap">
-            {/* heading lives inside the pinned frame so it stays with the step */}
-            <div className="proc-head">
-              <span className="eyebrow dark">Process</span>
-              <h2 className="serif" id="proc-h">A clear <span className="italic">process</span>, from first call to daily watch</h2>
-            </div>
+        {/* tabs — click to jump to a step */}
+        <div className="proc-tabs" role="tablist" aria-label="Our process steps">
+          {STEPS.map(([sn, stag], i) => (
+            <button
+              key={sn}
+              role="tab"
+              aria-selected={i === active}
+              className={"proc-tab" + (i === active ? " active" : "")}
+              onClick={() => go(i)}
+            >
+              <span className="proc-num">{sn}</span> {stag}
+            </button>
+          ))}
+        </div>
 
-            {/* mobile step pills */}
-            {!isD && (
-              <div className="proc-mrail">
-                {STEPS.map(([sn, stag], i) => (
-                  <button key={sn} className={"proc-dot" + (i === active ? " active" : "")}
-                    onClick={() => goTo(i)} aria-current={i === active}>
-                    {sn} &middot; {stag}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="proc-grid">
-              {isD && (
-                <div className="proc-rail">
-                  {STEPS.map(([sn, stag], i) => (
-                    <button key={sn} className={"proc-step" + (i === active ? " active" : "")}
-                      onClick={() => goTo(i)} aria-current={i === active}>
-                      <span className="proc-num">{sn}</span> {stag}
-                    </button>
-                  ))}
-                  {/* down arrow sits under the three step buttons */}
-                  {/* <div className="proc-next">
-                    <button onClick={() => goTo(active + 1)} disabled={active >= STEPS.length - 1}
-                      aria-label="Next step">&darr;</button>
-                  </div> */}
-                </div>
-              )}
-
-              <div className="proc-img proc-fade" key={"i" + active}>
-                <Img src={img} alt={`${title} — CISS Lucknow`} />
-              </div>
-
-              <div className="proc-card proc-fade" key={"c" + active}>
-                <div className="proc-tag">Step {n}</div>
-                <h3 className="proc-title">{title}</h3>
-                <p className="proc-desc">{desc}</p>
-                <div className="proc-get">
-                  <div className="k">What you get</div>
-                  <div className="v">{get}</div>
-                </div>
-              </div>
-            </div>
-
-            {!isD && (
-              <div className="proc-next">
-                <button onClick={() => goTo(active + 1)} disabled={active >= STEPS.length - 1}
-                  aria-label="Next step">&darr;</button>
-              </div>
-            )}
+        <div className="proc-grid">
+          <div className="proc-img proc-fade" key={"i" + active}>
+            <Img src={img} alt={`${title} — CISS Lucknow`} />
           </div>
+
+          <div className="proc-card proc-fade" key={"c" + active}>
+            <div className="proc-tag">Step {n}</div>
+            <h3 className="proc-title">{title}</h3>
+            <p className="proc-desc">{desc}</p>
+            <div className="proc-get">
+              <div className="k">What you get</div>
+              <div className="v">{get}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* prev / next */}
+        <div className="proc-arrows">
+          <button className="proc-arrow" onClick={() => go(active - 1)}
+            disabled={active === 0} aria-label="Previous step">&larr;</button>
+          <span className="proc-count">{active + 1} / {STEPS.length}</span>
+          <button className="proc-arrow" onClick={() => go(active + 1)}
+            disabled={active === STEPS.length - 1} aria-label="Next step">&rarr;</button>
         </div>
       </div>
     </section>
