@@ -578,17 +578,25 @@ function Process() {
         </div>
 
         <div className="proc-grid">
-          <div className="proc-img proc-fade" key={"i" + active}>
-            <Img src={img} alt={`${title} — CISS Lucknow`} />
+          <div className="proc-img">
+            <img
+              key={active}
+              className="proc-swap"
+              src={img}
+              alt={`${title} — CISS Lucknow`}
+              onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+            />
           </div>
 
-          <div className="proc-card proc-fade" key={"c" + active}>
-            <div className="proc-tag">Step {n}</div>
-            <h3 className="proc-title">{title}</h3>
-            <p className="proc-desc">{desc}</p>
-            <div className="proc-get">
-              <div className="k">What you get</div>
-              <div className="v">{get}</div>
+          <div className="proc-card">
+            <div key={active} className="proc-swap proc-cardbody">
+              <div className="proc-tag">Step {n}</div>
+              <h3 className="proc-title">{title}</h3>
+              <p className="proc-desc">{desc}</p>
+              <div className="proc-get">
+                <div className="k">What you get</div>
+                <div className="v">{get}</div>
+              </div>
             </div>
           </div>
         </div>
