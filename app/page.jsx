@@ -1,6 +1,6 @@
 import Site from "../components/Site";
 import { SITE_URL } from "./layout";
-
+import { Analytics } from "@vercel/analytics/next"
 /*
   Structured data (JSON-LD). This is what gets you rich results in Google
   for local searches like "security guards near me" / "security agency Lucknow".
@@ -116,6 +116,7 @@ export default function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }}
       />
       <Site />
+      <Analytics />
     </>
   );
 }
