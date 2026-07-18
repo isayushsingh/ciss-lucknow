@@ -17,7 +17,7 @@ const WEB3FORMS_KEY = "YOUR_ACCESS_KEY_HERE"; // get from https://web3forms.com
 const PHONE = "+91 9415348999";
 const PHONE_TEL = "+919415348999";
 const EMAIL = "contact.cisslucknow@gmail.com";
-const ADDRESS = "[Office address], Lucknow, Uttar Pradesh";
+const ADDRESS = "B-5/434, Viraj Khand, Gomti Nagar, Lucknow, Uttar Pradesh";
 // Google Maps: replace with your exact address or business name
 const MAPS_QUERY = "Civil Industrial Security Services Lucknow";
 const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAPS_QUERY)}`;
@@ -77,21 +77,29 @@ const FAQS = [
   ["Do you provide both armed and unarmed security guards in Lucknow?",
    "You can feel free to hire armed or unarmed security guards from us after assessing your protection necessities in Lucknow. If you are on the fence about your choice, you may also ask our experts to suggest the right step for you and your asset."],
   ["What industries do you serve?",
-   "At S&IB, we vouch to serve all kinds of industries because our clients are our prime focus. It does not matter if your requirements stem from the corporate, industrial, residential, healthcare, education, retail, or event security sector, we can be for you without any further challenges."],
+   "At CISS, we vouch to serve all kinds of industries because our clients are our prime focus. It does not matter if your requirements stem from the corporate, industrial, residential, healthcare, education, retail, or event security sector, we can be for you without any further challenges."],
   ["Do you offer 24/7 security services?",
    "Yes, we offer rotating shifts to our expert professionals so that your property or asset can be under watch at all times. Our staff is also free to pick schedules of their own, making sure you can feel at ease in your house or office."],
   ["Do you provide short-term and long-term security contracts?",
-   "You can get your hands on both short-term and long-term security contracts from us, based on your requirements.\n\nWe can even customize a security plan for you with your chosen duration for the best experience. At S&IB, we believe in flexibility because we understand that customers have unique demands."],
+   "You can get your hands on both short-term and long-term security contracts from us, based on your requirements.\n\nWe can even customize a security plan for you with your chosen duration for the best experience. At CISS, we believe in flexibility because we understand that customers have unique demands."],
   ["How do you assess security risks for my property or business?",
    "If you are curious about how we conduct our security risk assessment session, the first thing you should know is this is done by our reliable experts. Once they visit your place, they check the site, look for possible vulnerabilities, and suggest protection measures that can get rid of these risks."],
   ["Can I request female security guards?",
-   "Absolutely! Feel free to ask for female security guards from us if you have chosen S&IB as your protection partner. We understand the need for gender-specific duties, so we have personnel of all genders at our disposal."],
+   "Absolutely! Feel free to ask for female security guards from us if you have chosen CISS as your protection partner. We understand the need for gender-specific duties, so we have personnel of all genders at our disposal."],
   ["Do you offer CCTV monitoring and electronic security?",
    "Yes, we have various kinds of unified security systems that we can utilize to monitor your property in detail. Remote monitoring, entry control, and high-tech security solutions are some of the high-tech options you will get from us. Hence, call us today and secure your premises immediately!"],
 ];
 
-// Client / partner names — swap for <img src="/images/clients/logos/x.svg" /> when you have real logos
-const LOGOS_ROW_1 = ["HALDEN ESTATE", "AURA MALL", "NIRMAN GROUP", "SHREE TEXTILES", "AVADH HOSPITAL", "LUCKNOW HEIGHTS"];
+// Client / partner names — swap for <img src="/images/clients/logos/x.svg" /> when you have real logos.
+// The second value picks a placeholder mark from LogoMark until then.
+const LOGOS_ROW_1 = [
+  ["HALDEN ESTATE", "rings"],
+  ["AURA MALL", "sparkle"],
+  ["NIRMAN GROUP", "triangles"],
+  ["SHREE TEXTILES", "target"],
+  ["AVADH HOSPITAL", "cross"],
+  ["LUCKNOW HEIGHTS", "blocks"],
+];
 const LOGOS_ROW_2 = ["GOMTI RESIDENCY", "KISAN COLD STORAGE", "ROYAL BANQUETS", "UNITY BANK", "CAPITAL MOTORS", "ORION SCHOOL"];
 
 // Cities served — cycles in the hero headline
@@ -196,6 +204,24 @@ function LineIcon({ name, size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
       {map[name]}
+    </svg>
+  );
+}
+
+/* Simple geometric marks standing in for client logos until real ones are supplied. */
+function LogoMark({ shape, size = 18 }) {
+  const p = { fill: "none", stroke: "currentColor", strokeWidth: 2.0, strokeLinecap: "round", strokeLinejoin: "round" };
+  const shapes = {
+    rings: <><circle {...p} cx="8" cy="10" r="7.5" /><circle {...p} cx="13" cy="10" r="7.5" /></>,
+    sparkle: <path {...p} d="M10 1.5l2 6.5 6.5 2-6.5 2-2 6.5-2-6.5L1.5 10l6.5-2z" />,
+    triangles: <><path {...p} d="M4 16l5-11.5 5 11.5z" /><path {...p} d="M10.5 16l4.5-9.5 4.5 9.5z" /></>,
+    target: <><circle {...p} cx="10" cy="10" r="8" /><circle {...p} cx="10" cy="10" r="4.3" /><circle cx="10" cy="10" r="1.1" fill="currentColor" /></>,
+    cross: <><circle {...p} cx="10" cy="10" r="8" /><path {...p} d="M10 6v8M6 10h8" /></>,
+    blocks: <><rect {...p} x="2" y="8.5" width="6.5" height="9.5" /><rect {...p} x="10.5" y="3" width="6.5" height="15" /></>,
+  };
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true">
+      {shapes[shape]}
     </svg>
   );
 }
@@ -342,7 +368,7 @@ export function Nav({ onQuote }) {
           {NAV.map(([l, h]) => <li key={l}><a href={h}>{l}</a></li>)}
         </ul>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <button className="pill pill-dark" onClick={onQuote}>Get a Quote</button>
+          <button className="pill pill-light" onClick={onQuote}>Get a Quote</button>
           <button className="hamburger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <span /><span /><span />
           </button>
@@ -387,7 +413,12 @@ function HeroClients() {
         <div className="hc-side"><span className="hc-label">Our Clients</span></div>
         <div className="hc-track-wrap">
           <div className="mq-track hc-track">
-            {loop.map((n, i) => <span className="mq-item hc-item" key={i}>{n}</span>)}
+            {loop.map(([n, shape], i) => (
+              <span className="mq-item hc-item" key={i}>
+                <LogoMark shape={shape} />
+                {n}
+              </span>
+            ))}
           </div>
         </div>
       </div>
@@ -407,8 +438,7 @@ function NoticeBoard({ onApply }) {
             {JOBS.map(([title, loc, type]) => (
               <div className="job-row" key={title}>
                 <div className="job-main">
-                  <div className="job-title">{title}</div>
-                  <div className="job-meta">{loc} &middot; {type}</div>
+                  <div className="job-title">{title}<span className="job-meta italic"> ({loc})</span></div>
                 </div>
                 <button type="button" className="pill pill-outline" onClick={() => onApply(title)}>Apply</button>
               </div>
@@ -467,7 +497,7 @@ function Services() {
         <div className="svc-side">
           <h2 className="serif" id="svc-h">Security for every <span className="italic">kind</span> of site.</h2>
           <p className="sub">From industrial plants to weddings, we deploy trained, PSARA-licensed guards matched to your site.</p>
-          <a href="/services" className="btn-rect">See All Services</a>
+          <a href="/services" className="btn-rect-white">See All Services</a>
         </div>
         <div className="svc-cards">
           {shown.map(([label, path]) => (
@@ -494,10 +524,10 @@ function WhyUs() {
           <div className="why-founder">
             <div className="why-founder-photo"><Img src="/images/founder.jpg" alt="Founder of CISS Lucknow, a retired IPS officer" /></div>
             <div className="why-founder-name">M.R. Singh</div>
-            <div className="why-founder-role">Ex-Deputy Inspector General (Uttar Pradesh Police)</div>
+            <div className="why-founder-role">Ex-Deputy Inspector General (IPS)</div>
             <ul className="why-founder-list">
-              <li>Over three decades of experience serving in the Indian Police Service (IPS).</li>
-              <li>Brings that same discipline, integrity, and command to private security across Lucknow.</li>
+              <li>Over three decades of experience serving in the Indian Police Service.</li>
+              <li>Brings that same discipline and integrity to private security across UP</li>
             </ul>
           </div>
         </Reveal>
@@ -653,11 +683,6 @@ export function ApplyModal({ job, onClose }) {
               <div className="cf-field">
                 <label htmlFor="a-email">Email</label>
                 <input id="a-email" type="email" value={f.email} onChange={set("email")} />
-              </div>
-              <div className="cf-field">
-                <label htmlFor="a-msg">Experience / resume link</label>
-                <textarea id="a-msg" rows={3} value={f.message} onChange={set("message")}
-                  placeholder="Prior experience, or a link to your resume" />
               </div>
               {error && <div className="cf-err">{error}</div>}
               <button className="cf-submit" type="submit" disabled={status === "sending"}
@@ -828,7 +853,6 @@ function ContactForm() {
     <section className="cform" id="contact" aria-labelledby="ct-h">
       <div className="wrap cf-grid">
         <div className="cf-side">
-          <span className="eyebrow">Contact</span>
           <h2 className="cf-title" id="ct-h">Request a free assessment</h2>
           <div className="cf-reach">
             <div className="k">Reach us directly</div>
@@ -886,11 +910,11 @@ function MapSection() {
     <div className="mapwrap">
       <iframe src={MAPS_EMBED} title="CISS Lucknow office location on Google Maps"
         loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
-      <div className="map-card">
+      {/* <div className="map-card">
         <div className="t">CISS Lucknow</div>
         <p className="a">{ADDRESS}</p>
         <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer">Get directions &rarr;</a>
-      </div>
+      </div> */}
     </div>
   );
 }
