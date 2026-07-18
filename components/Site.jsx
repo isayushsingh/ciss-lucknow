@@ -24,7 +24,7 @@ const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURICo
 const MAPS_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(MAPS_QUERY)}&output=embed`;
 
 // ============ DATA ============
-const SERVICES = [
+export const SERVICES = [
   ["Industrial & Factory Security", "/images/services/industrial.jpg"],
   ["Corporate & Office Security", "/images/services/corporate.jpg"],
   ["Residential & Apartment Guards", "/images/services/residential.jpg"],
@@ -40,19 +40,11 @@ const SERVICES = [
   ["Construction & Property Guards", "/images/services/construction.jpg"],
   ["24/7 General Security Guards", "/images/services/general.jpg"],
 ];
-const MOCK_SERVICES = [
-  "Industrial & Factory Security",
-  "School & College Security",
-  "Mall & Cinema Security",
-  "Event & Wedding Security",
-  "Women Security Guards",
-];
-
 const WHY = [
-  ["check", "Rigorously Vetted Guards", "Police verification, background checks, and physical fitness screening on every single hire."],
+  ["shield", "Rigorously Vetted Guards", "Police verification, background checks, and physical fitness screening on every single hire."],
   ["clock", "24/7 Rapid Response", "A live control room and Quick Response Team, reachable any hour, any day of the year."],
   ["doc", "100% PSARA Compliant", "Fully licensed under PSARA, with PF, ESI and statutory paperwork handled for you."],
-  ["star", "Trained & Turned Out", "Regular drills, fire and first-aid basics, and a smart uniformed presence that reflects on you."],
+  ["badge", "Trained & Turned Out", "Regular drills, fire and first-aid basics, and a smart uniformed presence that reflects on you."],
 ];
 
 const STEPS = [
@@ -79,15 +71,47 @@ const TESTI = [
     s1: ["6", "Sites covered"], s2: ["100%", "Compliance"] },
 ];
 
+const FAQS = [
+  ["Are your security guards licensed and trained?",
+   "Yes, we instruct and mentor our personnel thoroughly to make sure they do not falter in any situation.\n\nYou should also know that each of our staff is licensed under the Private Security Agencies Regulation Act. This means that they are prepared to launch the appropriate critical incident response at any time."],
+  ["Do you provide both armed and unarmed security guards in Lucknow?",
+   "You can feel free to hire armed or unarmed security guards from us after assessing your protection necessities in Lucknow. If you are on the fence about your choice, you may also ask our experts to suggest the right step for you and your asset."],
+  ["What industries do you serve?",
+   "At S&IB, we vouch to serve all kinds of industries because our clients are our prime focus. It does not matter if your requirements stem from the corporate, industrial, residential, healthcare, education, retail, or event security sector, we can be for you without any further challenges."],
+  ["Do you offer 24/7 security services?",
+   "Yes, we offer rotating shifts to our expert professionals so that your property or asset can be under watch at all times. Our staff is also free to pick schedules of their own, making sure you can feel at ease in your house or office."],
+  ["Do you provide short-term and long-term security contracts?",
+   "You can get your hands on both short-term and long-term security contracts from us, based on your requirements.\n\nWe can even customize a security plan for you with your chosen duration for the best experience. At S&IB, we believe in flexibility because we understand that customers have unique demands."],
+  ["How do you assess security risks for my property or business?",
+   "If you are curious about how we conduct our security risk assessment session, the first thing you should know is this is done by our reliable experts. Once they visit your place, they check the site, look for possible vulnerabilities, and suggest protection measures that can get rid of these risks."],
+  ["Can I request female security guards?",
+   "Absolutely! Feel free to ask for female security guards from us if you have chosen S&IB as your protection partner. We understand the need for gender-specific duties, so we have personnel of all genders at our disposal."],
+  ["Do you offer CCTV monitoring and electronic security?",
+   "Yes, we have various kinds of unified security systems that we can utilize to monitor your property in detail. Remote monitoring, entry control, and high-tech security solutions are some of the high-tech options you will get from us. Hence, call us today and secure your premises immediately!"],
+];
+
 // Client / partner names — swap for <img src="/images/clients/logos/x.svg" /> when you have real logos
 const LOGOS_ROW_1 = ["HALDEN ESTATE", "AURA MALL", "NIRMAN GROUP", "SHREE TEXTILES", "AVADH HOSPITAL", "LUCKNOW HEIGHTS"];
 const LOGOS_ROW_2 = ["GOMTI RESIDENCY", "KISAN COLD STORAGE", "ROYAL BANQUETS", "UNITY BANK", "CAPITAL MOTORS", "ORION SCHOOL"];
 
-const NAV = [["Services", "#services"], ["Why Us", "#why"], ["Process", "#process"], ["Clients", "#clients"], ["Contact", "#contact"]];
+// Cities served — cycles in the hero headline
+const CITIES = ["Lucknow", "Noida", "Greater Noida", "Kanpur", "Unnao"];
+
+// Open roles — shown in the Notice Board section, each opens the apply modal
+export const JOBS = [
+  ["Security Guard (Male)", "Lucknow", "Full-time"],
+  ["Security Guard (Female)", "Kanpur", "Full-time"],
+  ["Site Supervisor", "Unnao", "Full-time"],
+  ["Bouncer / Event Security", "Lucknow", "Contract"],
+  ["Ex-Servicemen Supervisor", "Gautam Buddha Nagar", "Full-time"],
+  ["Cash Van Guard", "Lucknow", "Full-time"],
+];
+
+const NAV = [["Services", "#services"], ["Why Us", "#why"], ["Process", "#process"], ["Careers", "#careers"], ["Clients", "#clients"], ["Contact", "#contact"]];
 
 // ============ HELPERS ============
 // Cycles through phrases with a type / pause / delete effect.
-function useTypewriter(words, { type = 70, del = 40, hold = 1400 } = {}) {
+function useTypewriter(words, { type = 70, del = 38, hold = 1600 } = {}) {
   const [text, setText] = useState(words[0]);
   useEffect(() => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
@@ -150,17 +174,31 @@ function Reveal({ children, variant = "rise", delay = 0, className = "" }) {
   return <div ref={ref} className={`${variant} ${className}`}>{children}</div>;
 }
 
-const LineIcon = ({ name, size = 22 }) => {
-  const p = { fill: "none", stroke: "currentColor", strokeWidth: 1.7, strokeLinecap: "round", strokeLinejoin: "round" };
+/* Thin-line icons, matching the Fylla "what we do" icon style */
+function LineIcon({ name, size = 40 }) {
+  const p = { fill: "none", stroke: "currentColor", strokeWidth: 1.3, strokeLinecap: "round", strokeLinejoin: "round" };
   const map = {
-    shield: <path {...p} d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />,
-    check: <><path {...p} d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" /><path {...p} d="M9 11l2 2 4-4" /></>,
-    clock: <><circle {...p} cx="12" cy="12" r="8" /><path {...p} d="M12 8v4l3 2" /></>,
-    doc: <><path {...p} d="M6 3h8l4 4v14H6z" /><path {...p} d="M9 13l2 2 4-4" /></>,
-    star: <path {...p} d="M12 4l2.3 4.7 5.2.8-3.8 3.6.9 5.1L12 15.9 7.4 18.3l.9-5.1L4.5 9.5l5.2-.8z" />,
+    shield: <path {...p} d="M20 3.5l13 5v9.5c0 8.5-5.6 14-13 16.5C12.6 32 7 26.5 7 18V8.5l13-5z" />,
+    clock: <>
+      <circle {...p} cx="20" cy="20" r="15.5" />
+      <path {...p} d="M20 11v9l6.5 4" />
+    </>,
+    doc: <>
+      <path {...p} d="M11 4h13l6.5 6.5V36H11V4z" />
+      <path {...p} d="M24 4v7h7" />
+      <path {...p} d="M15.5 22l3 3 6.5-7" />
+    </>,
+    badge: <>
+      <polygon {...p} points="20,4 23.2,7.9 28,6.1 28.8,11.2 33.9,12 32.1,16.8 36,20 32.1,23.2 33.9,28 28.8,28.8 28,33.9 23.2,32.1 20,36 16.8,32.1 12,33.9 11.2,28.8 6.1,28 7.9,23.2 4,20 7.9,16.8 6.1,12 11.2,11.2 12,6.1 16.8,7.9" />
+      <path {...p} d="M16 20l3 3 5.5-6" />
+    </>,
   };
-  return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">{map[name]}</svg>;
-};
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true">
+      {map[name]}
+    </svg>
+  );
+}
 
 /* Optional image: renders <img> if the file exists, else shows the path placeholder */
 function Img({ src, alt }) {
@@ -169,103 +207,8 @@ function Img({ src, alt }) {
   return <img src={src} alt={alt} loading="lazy" onError={() => setOk(false)} />;
 }
 
-// ============ FOCUS CAROUSEL ============
-/* Auto-scrolls; centre card renders in colour. Arrow buttons work because the
-   rAF loop stands down while a manual nudge animates (this was the old bug). */
-function FocusCarousel({ items, renderCard, cardClass }) {
-  const ref = useRef(null);
-  const paused = useRef(false);
-  const nudging = useRef(false);
-  const timer = useRef(null);
-  const nudgeTimer = useRef(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    let raf;
-
-    const focus = () => {
-      const box = el.getBoundingClientRect();
-      const cx = box.left + box.width / 2;
-      const radius = box.width * 0.5;
-      for (const child of el.children) {
-        const r = child.getBoundingClientRect();
-        const d = Math.abs(r.left + r.width / 2 - cx);
-        const ratio = Math.max(0, Math.min(1, 1 - d / radius));
-        const eased = ratio * ratio;
-        child.style.filter = `grayscale(${(1 - eased) * 100}%) brightness(${0.82 + eased * 0.18})`;
-        child.style.transform = `scale(${0.9 + eased * 0.1})`;
-        child.style.opacity = `${0.55 + eased * 0.45}`;
-        child.style.zIndex = eased > 0.5 ? "2" : "1";
-        const ov = child.querySelector(".focus-overlay");
-        if (ov) ov.style.opacity = `${Math.max(0, (eased - 0.55) / 0.45)}`;
-      }
-    };
-
-    const tick = () => {
-      if (!nudging.current) {
-        if (!paused.current && !reduce) el.scrollLeft += 0.45;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-        else if (el.scrollLeft < 0) el.scrollLeft += half;
-      }
-      focus();
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    const pause = () => { paused.current = true; clearTimeout(timer.current); };
-    const resume = () => { clearTimeout(timer.current); timer.current = setTimeout(() => (paused.current = false), 1600); };
-    el.addEventListener("mouseenter", pause);
-    el.addEventListener("mouseleave", resume);
-    el.addEventListener("touchstart", pause, { passive: true });
-    el.addEventListener("touchend", resume, { passive: true });
-    el.addEventListener("wheel", () => { pause(); resume(); }, { passive: true });
-    el.scrollLeft = el.scrollWidth * 0.08;
-
-    return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(timer.current);
-      clearTimeout(nudgeTimer.current);
-      el.removeEventListener("mouseenter", pause);
-      el.removeEventListener("mouseleave", resume);
-    };
-  }, [items]);
-
-  const nudge = (dir) => {
-    const el = ref.current;
-    if (!el) return;
-    paused.current = true;
-    nudging.current = true; // stop the loop fighting the smooth scroll
-    clearTimeout(nudgeTimer.current);
-    clearTimeout(timer.current);
-    const w = el.children[0]?.getBoundingClientRect().width || 240;
-    el.scrollBy({ left: dir * (w + 16), behavior: "smooth" });
-    nudgeTimer.current = setTimeout(() => {
-      nudging.current = false;
-      timer.current = setTimeout(() => (paused.current = false), 1400);
-    }, 620);
-  };
-
-  const loop = [...items, ...items];
-  return (
-    <>
-      <div className="fc-scroll" ref={ref}>
-        {loop.map((it, i) => (
-          <div className={"focus-card " + cardClass} key={i}>{renderCard(it, i)}</div>
-        ))}
-      </div>
-      <div className="fc-arrows">
-        <button className="fc-arrow" onClick={() => nudge(-1)} aria-label="Previous">&larr;</button>
-        <button className="fc-arrow" onClick={() => nudge(1)} aria-label="Next">&rarr;</button>
-      </div>
-    </>
-  );
-}
-
 // ============ QUOTE MODAL ============
-function QuoteModal({ onClose }) {
+export function QuoteModal({ onClose }) {
   const [f, setF] = useState({ name: "", email: "", phone: "", company: "" });
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
@@ -348,8 +291,46 @@ function QuoteModal({ onClose }) {
   );
 }
 
+/* "Talk to us" opens this — contact details, not a lead form. */
+export function ContactModal({ onClose }) {
+  useEffect(() => {
+    const esc = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", esc);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", esc);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  return (
+    <div className="modal-back" onClick={onClose} role="dialog" aria-modal="true" aria-label="Contact CISS Lucknow">
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-x" onClick={onClose} aria-label="Close">&times;</button>
+        <h2 className="serif">Talk to <span className="italic">us</span></h2>
+        <p className="m-sub">We&rsquo;re available 24/7 for urgent security needs &mdash; reach us directly.</p>
+        <div className="cf-side-card">
+          <div className="t">Reach us directly</div>
+          <p className="d">
+            Phone / WhatsApp: <a href={`tel:${PHONE_TEL}`}>{PHONE}</a><br />
+            Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a><br />
+            {ADDRESS}
+          </p>
+          <a className="map-btn" href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+            </svg>
+            View on Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ============ SECTIONS ============
-function Nav({ onQuote }) {
+export function Nav({ onQuote }) {
   const [open, setOpen] = useState(false);
   return (
     <nav className="nav">
@@ -361,7 +342,7 @@ function Nav({ onQuote }) {
           {NAV.map(([l, h]) => <li key={l}><a href={h}>{l}</a></li>)}
         </ul>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <button className="pill pill-gold" onClick={onQuote}>Get a Quote</button>
+          <button className="pill pill-dark" onClick={onQuote}>Get a Quote</button>
           <button className="hamburger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <span /><span /><span />
           </button>
@@ -376,74 +357,83 @@ function Nav({ onQuote }) {
   );
 }
 
-/* Right-hand visual: a "find your guard" product moment.
-   Search card -> matched guard result, with annotation chips. */
-function Sparkle({ className, style }) {
+/* Bordered, rounded video card for the hero right-hand side.
+   Drop a looping clip at /videos/hero-loop.mp4 — falls back to the guard photo if it's missing. */
+function HeroVideo() {
+  const [videoOk, setVideoOk] = useState(true);
   return (
-    <svg className={className} style={style} viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-      <path d="M12 1.5l2.1 6.3 6.4 2.2-6.4 2.2L12 18.5l-2.1-6.3L3.5 10l6.4-2.2z"
-        fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function HeroMock() {
-   const typed = useTypewriter(MOCK_SERVICES);
-  return (
-    <div className="mock" aria-hidden="true">
-      <Sparkle className="mock-sparkle" />
-
-      {/* the "search" card */}
-      <div className="mock-search">
-        <div className="mock-field active">
-          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-            strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" />
-          </svg>
-          <span>{typed}<span className="type-caret" /></span>
-        </div>
-        <div className="mock-skeleton">
-          <i /><b />
-        </div>
-        <div className="mock-field muted">
-          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
-            strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
-          </svg>
-          <span>Gomti Nagar, Lucknow</span>
-        </div>
-      </div>
-
-      {/* the matched result */}
-      <div className="mock-result">
-        <div className="mock-photo">
-            <Img src="/images/hero-guard.jpg" alt="Matched CISS security guard" />
-          {/* <img className="mock-badge" src="/images/logo.png" alt="" /> */}
-        </div>
-        <div className="mock-meta">
-          <div className="mock-name">Guard matched<span className="mock-caret" /></div>
-          <div className="mock-sub">Deployed in 48 hrs</div>
-        </div>
-      </div>
-
-      {/* annotation chips */}
-      <span className="chip chip-verified"><i /> Verified</span>
-      <span className="chip chip-psara"><i /> PSARA</span>
-      <span className="chip chip-247"><i /> 24&times;7</span>
+    <div className="hero-video-card">
+      {videoOk ? (
+        <video
+          autoPlay muted loop playsInline
+          poster="/images/hero-guard.jpg"
+          onError={() => setVideoOk(false)}
+        >
+          <source src="/videos/hero-loop.mp4" type="video/mp4" />
+        </video>
+      ) : (
+        <Img src="/images/hero-guard.jpg" alt="CISS Lucknow security guard on duty" />
+      )}
     </div>
   );
 }
 
-function Hero({ onQuote }) {
+/* Client logo strip directly under the hero — reuses the same LOGOS_ROW_1 data as ClientLogos. */
+function HeroClients() {
+  const loop = [...LOGOS_ROW_1, ...LOGOS_ROW_1];
+  return (
+    <div className="hero-clients">
+      <div className="wrap hc-grid">
+        <div className="hc-side"><span className="hc-label">Our Clients</span></div>
+        <div className="hc-track-wrap">
+          <div className="mq-track hc-track">
+            {loop.map((n, i) => <span className="mq-item hc-item" key={i}>{n}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NoticeBoard({ onApply }) {
+  return (
+    <section className="careers" id="careers" aria-labelledby="careers-h">
+      <div className="wrap careers-grid">
+        <div className="careers-side">
+          <h2 className="careers-title" id="careers-h">Notice Board</h2>
+        </div>
+        <div className="careers-main">
+          <div className="job-list">
+            {JOBS.map(([title, loc, type]) => (
+              <div className="job-row" key={title}>
+                <div className="job-main">
+                  <div className="job-title">{title}</div>
+                  <div className="job-meta">{loc} &middot; {type}</div>
+                </div>
+                <button type="button" className="pill pill-outline" onClick={() => onApply(title)}>Apply</button>
+              </div>
+            ))}
+          </div>
+          <div className="careers-cta">
+            <a href="/workwithus" className="btn-rect">View All Openings</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Hero({ onContact }) {
+  const city = useTypewriter(CITIES);
   return (
     <header className="hero" id="top">
       <div className="wrap hero-grid">
         <div className="hero-copy">
-          <h1 className="serif"><span className="italic">Security Guard Services </span> in Lucknow</h1>
+          <h1>Security Guard Services in <br/><span className="city-word">{city}<span className="type-caret" /></span></h1>
           <p className="sub">From weddings to industrial sites, we match you with highly-trained, PSARA-licensed guards in as little as 48 hours.</p>
           <div className="hero-cta">
-            <button className="pill pill-white" onClick={onQuote}>Talk to us <span className="arrow-circ" aria-hidden="true">&rarr;</span></button>
-            <a href="#services" className="pill pill-grey" style={{ textDecoration: "none" }}>View services</a>
+            <button className="pill pill-dark" onClick={onContact}>Talk to us <span className="arrow-circ" aria-hidden="true">&rarr;</span></button>
+            <a href="#services" className="pill pill-outline" style={{ textDecoration: "none" }}>View Services</a>
           </div>
           <div className="hero-stats">
             <div className="hstat">
@@ -462,31 +452,31 @@ function Hero({ onQuote }) {
             </div>
           </div>
         </div>
-        <div className="hero-visual"><HeroMock /></div>
+        <div className="hero-visual"><HeroVideo /></div>
       </div>
+      <HeroClients />
     </header>
   );
 }
 
 function Services() {
+  const shown = SERVICES.slice(0, 6);
   return (
     <section className="svc" id="services" aria-labelledby="svc-h">
-      <div className="wrap" style={{ textAlign: "center" }}>
-        <span className="eyebrow">Our Services</span>
-        <h2 className="serif" id="svc-h">Security for every <span className="italic">kind</span> of site.</h2>
-      </div>
-      <div style={{ marginTop: 30 }}>
-        <FocusCarousel
-          items={SERVICES}
-          cardClass="svc-card"
-          renderCard={([label, path]) => (
-            <>
-              <div className="focus-img svc-img"><Img src={path} alt={`${label} in Lucknow`} /></div>
+      <div className="wrap svc-grid">
+        <div className="svc-side">
+          <h2 className="serif" id="svc-h">Security for every <span className="italic">kind</span> of site.</h2>
+          <p className="sub">From industrial plants to weddings, we deploy trained, PSARA-licensed guards matched to your site.</p>
+          <a href="/services" className="btn-rect">See All Services</a>
+        </div>
+        <div className="svc-cards">
+          {shown.map(([label, path]) => (
+            <div className="svc-card" key={label}>
+              <div className="svc-img grain"><Img src={path} alt={`${label} in Lucknow`} /></div>
               <h3 className="svc-label">{label}</h3>
-              {/* <div className="svc-arrow" aria-hidden="true">&rarr;</div> */}
-            </>
-          )}
-        />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -494,40 +484,32 @@ function Services() {
 
 function WhyUs() {
   return (
-    <section className="sec" id="why" aria-labelledby="why-h">
-      <div className="sec-head">
-        <span className="eyebrow dark">Why Us</span>
-        <h2 className="serif" id="why-h">What sets us <span className="italic">apart</span></h2>
-        <p className="sub">Anyone can put a person in a uniform. Here&rsquo;s what makes our watch different.</p>
+    <section className="why" id="why" aria-labelledby="why-h">
+      <div className="why-head">
+        <h2 className="why-title" id="why-h">What Sets Us Apart</h2>
       </div>
-      <div className="why-grid">
-        {/* Founder card — fades in */}
+      <div className="wrap why-body">
+        {/* Founder — fades in */}
         <Reveal variant="fade" className="why-founder-wrap">
           <div className="why-founder">
-            <div className="photo"><Img src="/images/founder.jpg" alt="Founder of CISS Lucknow, a retired IPS officer" /></div>
-            <div className="body">
-              <span className="badge">Retired IPS Officer</span>
-              <div className="name">M.R. Singh</div>
-              <div className="role">Ex-Deputy Inspector General (Uttar Pradesh Police)</div>
-              <p className="blurb">
-                Over three decades in the Indian Police Service. After a distinguished career in law
-                enforcement, he founded CISS to bring that same discipline, integrity, and command
-                to private security across Lucknow.
-              </p>
-            </div>
+            <div className="why-founder-photo"><Img src="/images/founder.jpg" alt="Founder of CISS Lucknow, a retired IPS officer" /></div>
+            <div className="why-founder-name">M.R. Singh</div>
+            <div className="why-founder-role">Ex-Deputy Inspector General (Uttar Pradesh Police)</div>
+            <ul className="why-founder-list">
+              <li>Over three decades of experience serving in the Indian Police Service (IPS).</li>
+              <li>Brings that same discipline, integrity, and command to private security across Lucknow.</li>
+            </ul>
           </div>
         </Reveal>
 
-        {/* Feature cards — swipe up, staggered */}
+        {/* Feature grid — plain, cross-divided, thin-line icon above each title */}
         <div className="why-cards">
-          {WHY.map(([icon, t, d], i) => (
-            <Reveal key={t} variant="rise" delay={i * 110}>
-              <div className="why-card">
-                <div className="why-ico"><LineIcon name={icon} /></div>
-                <h3 className="why-t">{t}</h3>
-                <p className="why-d">{d}</p>
-              </div>
-            </Reveal>
+          {WHY.map(([icon, t, d]) => (
+            <div className="why-card" key={t}>
+              <div className="why-ico"><LineIcon name={icon} /></div>
+              <h3 className="why-t">{t}</h3>
+              <p className="why-d">{d}</p>
+            </div>
           ))}
         </div>
       </div>
@@ -549,68 +531,144 @@ function ClientLogos() {
   );
 }
 
-function Process() {
-  const [active, setActive] = useState(0);
-  const go = (i) => setActive(Math.max(0, Math.min(STEPS.length - 1, i)));
-  const [n, tag, title, desc, get, img] = STEPS[active];
+/* Ambient slideshow — cycles through the three step photos with a slow crossfade. */
+function ProcessImage() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setI((v) => (v + 1) % STEPS.length), 3800);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className="proc-img">
+      {STEPS.map(([n, tag, , , , img], idx) => (
+        <img
+          key={n}
+          src={img}
+          alt={`${tag} — CISS Lucknow`}
+          className={"proc-img-layer" + (idx === i ? " active" : "")}
+          onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+        />
+      ))}
+    </div>
+  );
+}
 
+function Process() {
   return (
     <section id="process" className="proc" aria-labelledby="proc-h">
+      <div className="proc-head">
+        <h2 className="why-title" id="proc-h">A Clear Process</h2>
+      </div>
+
       <div className="wrap">
-        <div className="proc-head">
-          <span className="eyebrow dark">Process</span>
-          <h2 className="serif" id="proc-h">A clear <span className="italic">process</span>, from first call to daily watch</h2>
-        </div>
-
-        {/* tabs — click to jump to a step */}
-        <div className="proc-tabs" role="tablist" aria-label="Our process steps">
-          {STEPS.map(([sn, stag], i) => (
-            <button
-              key={sn}
-              role="tab"
-              aria-selected={i === active}
-              className={"proc-tab" + (i === active ? " active" : "")}
-              onClick={() => go(i)}
-            >
-              <span className="proc-num">{sn}</span> {stag}
-            </button>
-          ))}
-        </div>
-
         <div className="proc-grid">
-          <div className="proc-img">
-            <img
-              key={active}
-              className="proc-swap"
-              src={img}
-              alt={`${title} — CISS Lucknow`}
-              onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
-            />
-          </div>
+          <ProcessImage />
 
-          <div className="proc-card">
-            <div key={active} className="proc-swap proc-cardbody">
-              <div className="proc-tag">Step {n}</div>
-              <h3 className="proc-title">{title}</h3>
-              <p className="proc-desc">{desc}</p>
-              <div className="proc-get">
-                <div className="k">What you get</div>
-                <div className="v">{get}</div>
+          <div className="proc-list">
+            {STEPS.map(([n, tag, , desc]) => (
+              <div className="proc-item" key={n}>
+                <div className="proc-item-head">
+                  <span className="proc-circle">{n}</span>
+                  <h3 className="proc-item-title">{tag}</h3>
+                </div>
+                <p className="proc-item-desc">{desc}</p>
               </div>
-            </div>
+            ))}
           </div>
-        </div>
-
-        {/* prev / next */}
-        <div className="proc-arrows">
-          <button className="proc-arrow" onClick={() => go(active - 1)}
-            disabled={active === 0} aria-label="Previous step">&larr;</button>
-          <span className="proc-count">{active + 1} / {STEPS.length}</span>
-          <button className="proc-arrow" onClick={() => go(active + 1)}
-            disabled={active === STEPS.length - 1} aria-label="Next step">&rarr;</button>
         </div>
       </div>
     </section>
+  );
+}
+
+
+export function ApplyModal({ job, onClose }) {
+  const [f, setF] = useState({ name: "", email: "", phone: "", message: "", company: "" });
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
+  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
+
+  useEffect(() => {
+    const esc = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", esc);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", esc);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (f.company) { setStatus("sent"); return; } // honeypot
+    if (!f.name.trim() || !f.phone.trim()) { setError("Please add your name and phone number."); return; }
+    setError(""); setStatus("sending");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `New job application — ${job} — CISS Lucknow website`,
+          from_name: "CISS Lucknow Website",
+          name: f.name, email: f.email || "Not provided", phone: f.phone,
+          position: job, message: f.message || "—",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) setStatus("sent");
+      else { setStatus("idle"); setError(data.message || "Something went wrong. Please call us directly."); }
+    } catch {
+      setStatus("idle");
+      setError("Network error. Please try again, or call / WhatsApp us directly.");
+    }
+  };
+
+  return (
+    <div className="modal-back" onClick={onClose} role="dialog" aria-modal="true" aria-label={`Apply for ${job}`}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-x" onClick={onClose} aria-label="Close">&times;</button>
+        {status === "sent" ? (
+          <div style={{ padding: "30px 0", textAlign: "center" }}>
+            <h2 className="serif">Application received.</h2>
+            <p className="m-sub">Thanks for applying for {job}. We&rsquo;ll call you back shortly.</p>
+            <button className="cf-submit" onClick={onClose}>Close</button>
+          </div>
+        ) : (
+          <>
+            <h2 className="serif">Apply for <span className="italic">{job}</span></h2>
+            <p className="m-sub">Share your details and we&rsquo;ll call you back to schedule an interview.</p>
+            <form onSubmit={submit}>
+              <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hp"
+                value={f.company} onChange={set("company")} aria-hidden="true" />
+              <div className="cf-field">
+                <label htmlFor="a-name">Name</label>
+                <input id="a-name" value={f.name} onChange={set("name")} required />
+              </div>
+              <div className="cf-field">
+                <label htmlFor="a-phone">Phone / WhatsApp</label>
+                <input id="a-phone" type="tel" value={f.phone} onChange={set("phone")} required />
+              </div>
+              <div className="cf-field">
+                <label htmlFor="a-email">Email</label>
+                <input id="a-email" type="email" value={f.email} onChange={set("email")} />
+              </div>
+              <div className="cf-field">
+                <label htmlFor="a-msg">Experience / resume link</label>
+                <textarea id="a-msg" rows={3} value={f.message} onChange={set("message")}
+                  placeholder="Prior experience, or a link to your resume" />
+              </div>
+              {error && <div className="cf-err">{error}</div>}
+              <button className="cf-submit" type="submit" disabled={status === "sending"}
+                style={{ opacity: status === "sending" ? 0.7 : 1 }}>
+                {status === "sending" ? "Sending…" : "Submit Application"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -661,33 +719,28 @@ function Testimonials() {
 
   const loop = [...TESTI, ...TESTI];
   return (
-    <section className="sec" id="clients" aria-labelledby="cl-h" style={{ paddingTop: 34, paddingBottom: 30 }}>
-      <div className="sec-head">
-        <span className="eyebrow dark">Clients</span>
-        <h2 className="serif" id="cl-h">What our clients <span className="italic">say</span></h2>
+    <section className="tst" id="clients" aria-labelledby="cl-h">
+      <div className="tst-head">
+        <h2 className="why-title" id="cl-h">What Our Clients Say</h2>
       </div>
       <div className="tst-scroll" ref={ref}>
         {loop.map((t, i) => (
           <div className="tst-slide" key={i}>
-            <div className="tst-img">
-              <Img src={t.img} alt={`${t.name}, ${t.role}`} />
-              <div className="tst-logo">{t.logo}</div>
-              <div className="tst-name">
-                <div style={{ fontSize: 14, fontWeight: 700 }}>{t.name}</div>
-                <div style={{ fontSize: 12, opacity: 0.85 }}>{t.role}</div>
-              </div>
-            </div>
-            <div className="tst-review">
-              <blockquote className="tst-quote" style={{ margin: 0 }}>{t.quote}</blockquote>
-              <div>
-                <div className="tst-stats">
-                  {[t.s1, t.s2].map(([nn, ll]) => (
-                    <div className="tst-stat" key={ll}>
-                      <div className="n">{nn}</div><div className="l">{ll}</div>
-                    </div>
-                  ))}
+            <div className="tst-card">
+              <div className="tst-top">
+                <div className="tst-avatar"><Img src={t.img} alt={t.name} /></div>
+                <div>
+                  <div className="tst-person-name">{t.name}</div>
+                  <div className="tst-person-role">{t.role} &middot; {t.logo}</div>
                 </div>
-                <button className="pill pill-grey" style={{ padding: "12px 22px" }}>Read story</button>
+              </div>
+              <blockquote className="tst-quote">{t.quote}</blockquote>
+              <div className="tst-stats">
+                {[t.s1, t.s2].map(([nn, ll]) => (
+                  <div className="tst-stat" key={ll}>
+                    <div className="n">{nn}</div><div className="l">{ll}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -696,6 +749,43 @@ function Testimonials() {
       <div className="tst-arrows">
         <button className="tst-arrow" onClick={() => by(-1)} aria-label="Previous testimonial">&larr;</button>
         <button className="tst-arrow" onClick={() => by(1)} aria-label="Next testimonial">&rarr;</button>
+      </div>
+    </section>
+  );
+}
+
+function FAQ({ onContact }) {
+  const [open, setOpen] = useState(0);
+  return (
+    <section className="faq" id="faq" aria-labelledby="faq-h">
+      <div className="wrap faq-grid">
+        <div className="faq-side">
+          <h2 className="faq-title" id="faq-h">FAQs</h2>
+          <button type="button" className="btn-rect" onClick={onContact}>Get in Touch</button>
+        </div>
+        <div className="faq-list">
+          {FAQS.map(([q, a], i) => {
+            const isOpen = open === i;
+            return (
+              <div className="faq-item" key={q}>
+                <button
+                  type="button"
+                  className="faq-q"
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  aria-expanded={isOpen}
+                >
+                  <span>{q}</span>
+                  <span className={"faq-toggle" + (isOpen ? " open" : "")} aria-hidden="true">+</span>
+                </button>
+                {isOpen && (
+                  <div className="faq-a">
+                    {a.split("\n\n").map((p, pi) => <p key={pi}>{p}</p>)}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -736,71 +826,56 @@ function ContactForm() {
 
   return (
     <section className="cform" id="contact" aria-labelledby="ct-h">
-      <div className="wrap">
-        <div className="sec-head">
-          <span className="eyebrow">Get Started</span>
-          <h2 className="serif" id="ct-h">Request a free <span className="italic">assessment</span></h2>
-          <p className="sub">Tell us about your site. We&rsquo;ll respond within a few hours &mdash; we&rsquo;re available 24/7 for urgent needs.</p>
+      <div className="wrap cf-grid">
+        <div className="cf-side">
+          <span className="eyebrow">Contact</span>
+          <h2 className="cf-title" id="ct-h">Request a free assessment</h2>
+          <div className="cf-reach">
+            <div className="k">Reach us directly</div>
+            <p className="d">
+              Phone / WhatsApp: <a href={`tel:${PHONE_TEL}`}>{PHONE}</a><br />
+              Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a><br />
+              {ADDRESS}
+            </p>
+            <a className="cf-maplink" href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
+              View on Google Maps &rarr;
+            </a>
+          </div>
         </div>
-        <div className="cf-grid">
-          <div className="cf-side">
-            <div className="cf-side-card">
-              <div className="t">Reach us directly</div>
-              <p className="d">
-                Phone / WhatsApp: <a href={`tel:${PHONE_TEL}`}>{PHONE}</a><br />
-                Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a><br />
-                {ADDRESS}
-              </p>
-              <a className="map-btn" href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                  strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
-                </svg>
-                View on Google Maps
-              </a>
+
+        {status === "sent" ? (
+          <div className="cf-form-min">
+            <div style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>Thanks &mdash; we&rsquo;ll be in touch shortly.</div>
+            <div style={{ fontSize: 13.5, color: "#aeb7c6", marginTop: 8 }}>
+              Your request has reached our team. For anything urgent, call or WhatsApp us directly.
             </div>
           </div>
-
-          {status === "sent" ? (
-            <div className="cf-form">
-              <div style={{ padding: "40px 6px", textAlign: "center" }}>
-                <div style={{ fontSize: 20, fontWeight: 700, color: "#fff" }}>Thanks &mdash; we&rsquo;ll be in touch shortly.</div>
-                <div style={{ fontSize: 13.5, color: "#aeb7c6", marginTop: 8 }}>
-                  Your request has reached our team. For anything urgent, call or WhatsApp us directly.
-                </div>
-              </div>
+        ) : (
+          <form className="cf-form-min" onSubmit={submit}>
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hp"
+              value={f.company} onChange={set("company")} aria-hidden="true" />
+            <div className="cf-field-min">
+              <input id="c-name" placeholder="Your Name" aria-label="Your name" value={f.name} onChange={set("name")} required />
             </div>
-          ) : (
-            <form className="cf-form" onSubmit={submit}>
-              <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hp"
-                value={f.company} onChange={set("company")} aria-hidden="true" />
-              <div className="cf-field">
-                <label htmlFor="c-name">Name</label>
-                <input id="c-name" value={f.name} onChange={set("name")} required />
-              </div>
-              <div className="cf-field">
-                <label htmlFor="c-phone">Phone / WhatsApp</label>
-                <input id="c-phone" type="tel" value={f.phone} onChange={set("phone")} required />
-              </div>
-              <div className="cf-field">
-                <label htmlFor="c-svc">Service needed</label>
-                <select id="c-svc" value={f.service} onChange={set("service")}>
-                  <option value="">Select a service</option>
-                  {SERVICES.map(([s]) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-              <div className="cf-field">
-                <label htmlFor="c-msg">Message</label>
-                <textarea id="c-msg" rows={3} value={f.message} onChange={set("message")} />
-              </div>
-              {error && <div className="cf-err">{error}</div>}
-              <button className="cf-submit" type="submit" disabled={status === "sending"}
-                style={{ opacity: status === "sending" ? 0.7 : 1 }}>
-                {status === "sending" ? "Sending\u2026" : "Request Assessment"}
-              </button>
-            </form>
-          )}
-        </div>
+            <div className="cf-field-min">
+              <input id="c-phone" type="tel" placeholder="Your Phone / WhatsApp" aria-label="Your phone number" value={f.phone} onChange={set("phone")} required />
+            </div>
+            <div className="cf-field-min">
+              <select id="c-svc" aria-label="Service needed" value={f.service} onChange={set("service")}>
+                <option value="">Service needed (optional)</option>
+                {SERVICES.map(([s]) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div className="cf-field-min">
+              <textarea id="c-msg" rows={3} placeholder="Your Message" aria-label="Your message" value={f.message} onChange={set("message")} />
+            </div>
+            {error && <div className="cf-err">{error}</div>}
+            <button className="cf-submit-min" type="submit" disabled={status === "sending"}
+              style={{ opacity: status === "sending" ? 0.7 : 1 }}>
+              {status === "sending" ? "Sending\u2026" : "Request Assessment"}
+            </button>
+          </form>
+        )}
       </div>
     </section>
   );
@@ -820,35 +895,58 @@ function MapSection() {
   );
 }
 
-function Footer({ onQuote }) {
+export function Footer({ onQuote }) {
   const cols = [
     ["Services", [["Security Guards", "#services"], ["Bouncers & VIP", "#services"], ["Event Security", "#services"], ["Cash Van", "#services"]]],
-    ["Company", [["Why CISS", "#why"], ["Our Process", "#process"], ["Clients", "#clients"], ["Contact", "#contact"]]],
+    ["Company", [["Why CISS", "#why"], ["Our Process", "#process"], ["Careers", "#careers"], ["Clients", "#clients"], ["Contact", "#contact"]]],
     ["Contact", [[PHONE, `tel:${PHONE_TEL}`], ["Email us", `mailto:${EMAIL}`], ["Find us", MAPS_LINK]]],
     ["Legal", [["PSARA License", "#"], ["Privacy", "#"], ["Terms", "#"]]],
   ];
   return (
-    <footer className="footer">
-      <div className="footer-card">
-        <div className="footer-promo">
-          <img src="/images/logo-white.png" alt="CISS Lucknow" />
-          <div className="pt">Security you can stand behind.</div>
-          <button className="pb" onClick={onQuote}>Get a Quote &rarr;</button>
-        </div>
-        <div>
-          <div className="footer-links">
-            {cols.map(([h, links]) => (
-              <div className="fcol" key={h}>
-                <h3>{h}</h3>
-                {links.map(([l, href]) => <a href={href} key={l}>{l}</a>)}
-              </div>
-            ))}
+    <footer className="footer2">
+      <div className="wrap footer2-top">
+        <div className="footer2-brand-block">
+          <div className="footer2-brand">
+            <img className="footer2-logo" src="/images/logo.png" alt="" />
+            <span className="footer2-name">CISS</span>
           </div>
-          <div className="footer-bottom">
-            <span>&copy; {new Date().getFullYear()} CISS Lucknow &mdash; Civil &amp; Industrial Security Services.</span>
-            <span>Lucknow, Uttar Pradesh</span>
+          <p className="footer2-addr">{ADDRESS}</p>
+          <div className="footer2-social">
+            <a className="footer2-circle" href={`tel:${PHONE_TEL}`} aria-label="Call us">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2.2z" />
+              </svg>
+            </a>
+            <a className="footer2-circle" href={`mailto:${EMAIL}`} aria-label="Email us">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 4h16v16H4z" /><path d="m4 4 8 8 8-8" />
+              </svg>
+            </a>
+            <a className="footer2-circle" href={MAPS_LINK} target="_blank" rel="noopener noreferrer" aria-label="Find us on Google Maps">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
+              </svg>
+            </a>
           </div>
         </div>
+
+        <div className="footer2-links">
+          {cols.map(([h, links]) => (
+            <div className="footer2-col" key={h}>
+              <h3>{h}</h3>
+              {links.map(([l, href]) => <a href={href} key={l}>{l}</a>)}
+            </div>
+          ))}
+          <button type="button" className="btn-rect footer2-cta" onClick={onQuote}>Get a Quote</button>
+        </div>
+      </div>
+
+      <div className="wrap footer2-bottom">
+        <span>&copy; {new Date().getFullYear()} CISS Lucknow &mdash; Civil &amp; Industrial Security Services.</span>
+        <span>Lucknow, Uttar Pradesh</span>
       </div>
     </footer>
   );
@@ -860,19 +958,31 @@ export default function Site() {
   const openQuote = useCallback(() => setQuoteOpen(true), []);
   const closeQuote = useCallback(() => setQuoteOpen(false), []);
 
+  const [contactOpen, setContactOpen] = useState(false);
+  const openContact = useCallback(() => setContactOpen(true), []);
+  const closeContact = useCallback(() => setContactOpen(false), []);
+
+  const [applyJob, setApplyJob] = useState(null);
+  const openApply = useCallback((job) => setApplyJob(job), []);
+  const closeApply = useCallback(() => setApplyJob(null), []);
+
   return (
     <div className="pw">
       <Nav onQuote={openQuote} />
-      <Hero onQuote={openQuote} />
+      <Hero onContact={openContact} />
+      <NoticeBoard onApply={openApply} />
       <Services />
       <WhyUs />
-      <ClientLogos />
+
       <Process />
       <Testimonials />
+      <FAQ onContact={openContact} />
       <ContactForm />
       <MapSection />
       <Footer onQuote={openQuote} />
       {quoteOpen && <QuoteModal onClose={closeQuote} />}
+      {contactOpen && <ContactModal onClose={closeContact} />}
+      {applyJob && <ApplyModal job={applyJob} onClose={closeApply} />}
     </div>
   );
 }
